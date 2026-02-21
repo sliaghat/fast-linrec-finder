@@ -54,4 +54,15 @@ We then solve $\min_x ||Ax - b||_2$. If the relative residual $\frac{||Ax - b||_
 ## Properties & Optimizations
 
 ### 1. Why Binary Search is Correct
-In a Hankel matrix which represents a linear recurrence relation, if row $k$ is linearly dependent on its preceding rows, then row $k+1$ is guaranteed to be dependent on its preceding rows as well. Because this property guarantees a single transition point from independent to dependent, we only need to find the first linearly dependent row, which can be done via binary search. Here a binary search can correctly isolate the transition point (the linear complexity $k$) in $O(\log L)$ checks, bypassing the need for a linear $O(L)$ search over the rows.
+In a Hankel matrix which represents a linear recurrence relation, if row $k$ is linearly dependent on its preceding rows, then row $k+1$ is guaranteed to be dependent on its preceding rows as well. Because of this property that guarantees a single transition point from independent to dependent, we only need to find the first linearly dependent row, which can be done via binary search. Here a binary search can correctly find the transition point (the linear complexity $k$) in $O(\log L)$ checks, bypassing the need for a linear $O(L)$ search over the rows.
+
+
+### 2. The FFT Trick for LSQR
+LSQR only requires computing two operations at each of its iterations: $y \leftarrow y + Ax$ and $x \leftarrow x + A^Ty$. 
+Given the Hankel structure, the matrix-vector multiplication $Ax$ is exactly the discrete cross-correlation between the sequence $S$ and the vector $x$:
+
+$$ (A x)_i = \sum_{j=0}^{k-1} s_{i+j} x_j $$
+
+
+
+
