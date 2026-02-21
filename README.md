@@ -7,4 +7,17 @@ Given a noisy sequence $S = (s_0, s_1, \dots, s_{2L-1})$, the goal is to find th
 
 $$ s_{k+i} \approx \sum_{j=0}^{k-1} s_{i+j} x_j $$
 
+## Mathematical Foundation
+
+### The Hankel Matrix
+The given sequence can conceptually be mapped to a square Hankel matrix $H$ of size $L \times L$:
+
+$$ H = \begin{bmatrix} 
+s_0 & s_1 & s_2 & \dots & s_{L-1} \\ 
+s_1 & s_2 & s_3 & \dots & s_L \\ 
+\vdots & \vdots & \vdots & \ddots & \vdots \\ 
+s_{L-1} & s_L & s_{L+1} & \dots & s_{2L-2} 
+\end{bmatrix} $$
+
+Finding the linear complexity $k$ of the sequence is equivalent to finding the rank of $H$. In other words, we have to find the **first row** in $H$ that is linearly dependent on its preceding rows.
 
