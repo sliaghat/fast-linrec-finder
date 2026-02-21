@@ -47,6 +47,6 @@ We then solve $\min_x ||Ax - b||_2$. If the relative residual $\frac{||Ax - b||_
 
 1. **Space Optimization (Copy Once):** The $O(L^2)$ matrix $H$ is never explicitly constructed in memory. The 1D sequence $S$ is copied to the GPU only once.
 2. **Precompute FFT:** The sequence $S$ is zero-padded to $N$ (the next power of $2$ where $N \ge 2L$). Its Fourier transform, $\mathcal{F}(S)$, is computed once and cached on the device.
-3. **Binary Search on Rows:** Perform a binary search over the row indices $k \in [1, L-1]$ to find the minimal dependent row.
+3. **Binary Search on Rows:** Perform a binary search over the row indices $k \in [1, L-1]$ to find the first dependent row (with minimal index).
 4. **Iterative LSQR Setup:** For a chosen $k$, evaluate dependency using LSQR. Inside LSQR, all dense matrix-vector multiplications ($A x$ and $A^T y$) are replaced with $O(N \log N)$ FFT-based convolutions (actually cross-correlations to be more specific).
 
