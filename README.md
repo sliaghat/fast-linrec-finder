@@ -58,11 +58,18 @@ In a Hankel matrix which represents a linear recurrence relation, if row $k$ is 
 
 
 ### 2. The FFT Trick for LSQR
-LSQR only requires computing two operations at each of its iterations: $y \leftarrow y + Ax$ and $x \leftarrow x + A^Ty$. 
-Given the Hankel structure, the matrix-vector multiplication $Ax$ is exactly the discrete cross-correlation between the sequence $S$ and the vector $x$:
+The LSQR algorithm only requires computing two operations at each of its iterations: $y \leftarrow y + Ax$ and $x \leftarrow x + A^Ty$. 
+Given the structure of Hankel matrices, the matrix-vector multiplication $Ax$ is exactly the discrete cross-correlation between the sequence $S$ and the vector $x$:
 
 $$ (A x)_i = \sum_{j=0}^{k-1} s_{i+j} x_j $$
 
+We know that by the Convolution Theorem, cross-correlation can be computed in the frequency domain using the complex conjugate of the Fourier-transformed vector:
 
+$$ A x = \mathcal{F}^{-1} \Big( \mathcal{F}(S) \odot \overline{\mathcal{F}(x)} \Big) $$
 
+Where $\odot$ is element-wise complex multiplication and $\overline{Z}$ is the complex conjugate. This exact same logic applies to $A^T y$:
+
+$$ (A^T y)_j = \sum_{i=0}^{L-1} s_{i+j} y_i \implies A^T y = \mathcal{F}^{-1} \Big( \mathcal{F}(S) \odot \overline{\mathcal{F}(y)} \Big) $$
+
+Using `cuFFT`, this reduces the time complexity of each LSQR iteration from $O(L \cdot k)$ to $O(N \log N)$.
 
