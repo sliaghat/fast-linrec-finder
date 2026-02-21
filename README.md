@@ -21,3 +21,19 @@ s_{L-1} & s_L & s_{L+1} & \dots & s_{2L-2}
 
 Finding the linear complexity $k$ of the sequence is equivalent to finding the rank of $H$. In other words, we have to find the **first row** in $H$ that is linearly dependent on its preceding rows.
 
+### Dependency Check via LSQR
+In order to check if the $k$-th row is dependent on rows $0$ through $k-1$, we can formulate a linear least-squares problem as follows:
+
+$$ A x \approx b $$
+
+Where:
+- $b$ is the $k$-th row (transposed as a column vector): $b = [s_k, s_{k+1}, \dots, s_{k+L-1}]^T$
+- $A$ is an $L \times k$ matrix whose columns are the first $k$ rows of $H$ (transposed):
+
+$$ A = \begin{bmatrix} 
+s_0 & s_1 & \dots & s_{k-1} \\ 
+s_1 & s_2 & \dots & s_k \\ 
+\vdots & \vdots & \ddots & \vdots \\ 
+s_{L-1} & s_L & \dots & s_{k+L-2} 
+\end{bmatrix} $$
+We then solve $\min_x ||Ax - b||_2$. If the relative residual $\frac{||Ax - b||_2}{||b||_2}$ is below a defined threshold $\epsilon$, the row can be considered linearly dependent.
