@@ -67,9 +67,15 @@ We know that by the Convolution Theorem, cross-correlation can be computed in th
 
 $$ A x = \mathcal{F}^{-1} \Big( \mathcal{F}(S) \odot \overline{\mathcal{F}(x)} \Big) $$
 
-Where $\odot$ is element-wise complex multiplication and $\overline{Z}$ is the complex conjugate. This exact same logic applies to $A^T y$:
+Where $\odot$ is element-wise complex multiplication and $\overline{Z}$ is the complex conjugate. This exact same logic can be applied to $A^T y$:
 
 $$ (A^T y)_j = \sum_{i=0}^{L-1} s_{i+j} y_i \implies A^T y = \mathcal{F}^{-1} \Big( \mathcal{F}(S) \odot \overline{\mathcal{F}(y)} \Big) $$
 
-Using `cuFFT`, this reduces the time complexity of each LSQR iteration from $O(L \cdot k)$ to $O(N \log N)$.
+Using FFT, this reduces the time complexity of each LSQR iteration from $O(L \cdot k)$ to almost $O(L \log L)$.
+
+### 3. Maximum Space Efficiency
+Because $H$ is only defined by $S$, we can bypass building $H$. So space complexity drops:
+- **Naïve matrix approach:** $O(L^2)$ memory
+- **This algorithm:** $O(L)$ memory
+
 
