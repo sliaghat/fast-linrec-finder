@@ -2,10 +2,11 @@
 #include <vector>
 #include <cmath>
 #include <iomanip>
+#include <random>
 #include "RecurrenceHankelSolver.cuh"
 
 
-void printSequence(const std::vector<double>& seq, size_t lim = 15) {
+void printSequence(const std::vector<double>& seq, size_t lim = 20) {
     for (size_t i = 0; i < std::min(seq.size(), lim); i++) {
         std::cout << seq[i] << " ";
     }
@@ -23,6 +24,11 @@ int main() {
         // This sequence has a linear complexity of 3.
         std::vector<double> seq;
         int length = 50000; // Must be at least 2*L for the solver
+
+        // Uniform random number generation
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dist(0, 19);
         
         std::cout << "Generating test sequence" << std::endl;
 
@@ -33,7 +39,7 @@ int main() {
         for (int i = 3; i < length; i++) {
             double element = 2 * seq[i - 1] - 2 * seq[i - 2] + seq[i - 3];
             // Add a tiny amount of noise to test robustness
-            double noise = (double)rand() * 0.00001;
+            double noise = (double)dist(gen) * 0.00001;
             seq.push_back(element + noise);
         }
 
